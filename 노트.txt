@@ -1,0 +1,95 @@
+자바 -> 기본 생성자는 자동 생성 (생성자 존재 X 경우에만)
+
+클래스에서 생성자 내부에서 this()를 사용하여 다른 생성자 호출 가능
+(this()는 생성자 코드의 첫 줄에서만 작성 가능)
+
+하나의 자바 파일에는 public 클래스는 하나만 등장 가능 - 이름은 public
+이름이랑 통일시켜야 함
+(대신, default 접근 제어자 사용하는 클래스는 무한정 생성 가능)
+
+==============================================
+
+자바 메모리 구조
+- 메서드 영역 : 클래스 정보 보관 (붕어빵 틀 보관)
+- 힙 영역 : 객체(인스턴스) 생성되는 영역 - new 명령어로 이 영역 사용 (붕어빵 보관)
+- 스택 영역 : 실제 프로그램 실행되는 영역
+
+==============================================
+
+static 변수(= 정적 변수 = 클래스 변수)
+정적 변수에 접근 할 땐, 클래스명에 .(dot) 사용
+ex) Data3.count
+-> static 변수는 힙 영역이 아니라 메서드 영역에서 관리
+
+클래스 메서드(= 정적 메서드)
+메서드에 static을 붙이면 인스턴스 생성 없이 바로 메서드 호출 가능
+
+static은 static에만 접근 가능
+ex) public class DecoData {
+	private int instanceValue;
+	private static int staticValue;
+
+	public static void staticCall() {
+		staticValue++;
+		staticMethod();
+	}
+
+	public void instanceCall() {
+		instanceValue++;
+		instanceMethod();
+
+		staticValue++;
+		staticMethod();
+	}
+
+	public void instanceMethod() {
+		system.out.println("instanceValue = " + instanceValue);
+	}
+
+	public static void staticMethod() {
+		system.out.println("staticValue = " + staticValue);
+	}
+}
+
+-> staticCall은 인스턴스 생성 없이 main에서 생성가능하기에
+인스턴스가 존재하지 않는데 instanceValue와 instanceMethod 호출이 불가하기에 호출 불가능 (static은 static에만 접근 가능)
+-> 클래스 내의 static 함수에서 그래도 instanceValue, instanceMethod 호출을 원한다면 참조값을 넘겨 받아서 하면 가능
+ex)
+public static void staticCall(DecoData data) {
+        data.instanceValue++;
+        data.instanceMethod();
+    }
+
+==============================================
+
+final -> 처음 초기화 이후 값 변경 불가능
+static + final 이 붙은 값은 상수라고 함 (관습적으로 대문자로 표시)
+
+==============================================
+
+상속 - extends
+-> 하나의 자식(서브 클래스)는 하나의 부모(슈퍼 클래스)만을 상속받음
+: 자식은 부모의 메서드 물려받음
+
+overloading VS overriding
+- overloading
+: 같은 이름 함수여도 매개변수의 개수/타입이 다르면 사용 가능
+- overriding
+: 부모에게 상속 받은 기능을 자식이 재정의 하는 것
+
+super - 부모 클래스에 대한 참조
+(상속 관계를 사용하면 자식 클래스의 생성자에서 부모 클래스의 생성자를 반드시 호출해야 함 - 자식에서 부모의 기본 생성자는 생략 가능)
+
+클래스에 final -> 상속 끝! (이 클래스를 부모로 삼길 수 없음!)
+메서드에 final -> 오버라이딩 끝! (자식 클래스에서 이 메서드 변경 불가!)
+
+==============================================
+
+추상 매서드 : 바디가 존재하지 않으며 무조건 자식 클래스에서 오버라이딩 해줘야 함
+
+추상 클래스: 추상 매서드가 하나라도 존재 시, 추상 클래스로 선언해야함 (추상 매서드가 생성되는 걸 막기 위해)
+
+-> 매서드 바디가 없고 자식 클래스가 해당 매서드를 반드시 오버라이딩해야 한다는 제약 빼고 다 똑같음
+
+순수 추상 클래스 == 인터페이스 (public, abstract 자동 적용)
+인터페이스 : 다중 구현(다중 상속) 지원, 멤버변수는 public, static, final 자동 적용 (인터페이스는 상속이 아니라 구현이라고 함) - implements
